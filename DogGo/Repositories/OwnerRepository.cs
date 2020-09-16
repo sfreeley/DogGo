@@ -71,6 +71,7 @@ namespace DogGo.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"SELECT
+                                    Id,
                                     [Name],
                                     Email,
                                     Address,

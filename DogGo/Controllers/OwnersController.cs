@@ -40,6 +40,7 @@ namespace DogGo.Controllers
         }
 
         // GET: OwnersController/Create
+        //this method only creates the form and displays it to the user
         public ActionResult Create()
         {
             return View();
@@ -48,15 +49,18 @@ namespace DogGo.Controllers
         // POST: OwnersController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        //this method will actually submit or POST the form
+        //and then bring the user back to the index page;
+        public ActionResult Create(Owner owner)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _ownerRepo.AddOwner(owner);
+                return RedirectToAction("Index");
             }
-            catch
+            catch(Exception ex)
             {
-                return View();
+                return View(owner);
             }
         }
 
@@ -82,23 +86,28 @@ namespace DogGo.Controllers
         }
 
         // GET: OwnersController/Delete/5
+        //this will display the delete message and ask if you are sure
+        //if you want to delete this owner;
         public ActionResult Delete(int id)
         {
-            return View();
+            Owner owner = _ownerRepo.GetOwnerById(id);
+            return View(owner);
         }
 
         // POST: OwnersController/Delete/5
+        //this is the actual method that will delete the owner from the database;
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, Owner owner)
         {
             try
             {
+                _ownerRepo.DeleteOwner(id);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return View(owner);
             }
         }
     }
