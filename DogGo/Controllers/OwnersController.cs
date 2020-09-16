@@ -65,23 +65,33 @@ namespace DogGo.Controllers
         }
 
         // GET: OwnersController/Edit/5
+        // controller will get an owner id from the url route
+        // use that id to retrieve that specific data from the database
+        // use it to prepopulate the form with the information the user will be editing
         public ActionResult Edit(int id)
         {
-            return View();
+            Owner owner = _ownerRepo.GetOwnerById(id);
+            if (owner == null)
+            {
+                return NotFound();
+            }
+
+            return View(owner);
         }
 
         // POST: OwnersController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Owner owner)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _ownerRepo.UpdateOwner(owner);
+                return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                return View(owner);
             }
         }
 
