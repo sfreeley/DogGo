@@ -36,7 +36,7 @@ namespace DogGo.Controllers
             Owner owner = _ownerRepo.GetOwnerById(id);
             List<Dog> dogs = _dogRepo.GetDogsByOwnerId(owner.Id);
 
-            DogOwnerViewModel dogown = new DogOwnerViewModel()
+            ProfileViewModel dogown = new ProfileViewModel()
             {
                 Owner = owner,
                 Dogs = dogs
