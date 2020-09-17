@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DogGo.Models;
+using DogGo.Models.ViewModels;
 using DogGo.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,12 @@ namespace DogGo.Controllers
     public class DogsController : Controller
     {
         private readonly IDogRepository _dogRepo;
+        private readonly IOwnerRepository _ownerRepo;
 
-        public DogsController(IDogRepository dogRepository)
+        public DogsController(IDogRepository dogRepository, IOwnerRepository ownerRepository)
         {
             _dogRepo = dogRepository;
+            _ownerRepo = ownerRepository;
         }
         // GET: DogsController
         public ActionResult Index()
@@ -39,7 +42,14 @@ namespace DogGo.Controllers
         // GET: DogsController/Create
         public ActionResult Create()
         {
-            return View();
+            //using view model so we can connect the list of owners with the individual dog
+            DogFormViewModel vm = new DogFormViewModel()
+            {
+                Dog = new Dog(),
+                Owners = _ownerRepo.GetAllOwners()
+            };
+
+            return View(vm);
         }
 
         // POST: DogsController/Create
@@ -49,12 +59,21 @@ namespace DogGo.Controllers
         {
             try
             {
+                //add a new dog to the database
+                //this new dog may or may not have a value for Notes and/or ImageUrl
                 _dogRepo.AddDog(dog);
                 return RedirectToAction("Index");
             }
             catch
             {
-                return View(dog);
+                //if something goes wrong we return to the view, which is the DogFormViewModel
+                DogFormViewModel vm = new DogFormViewModel()
+                {
+                    Dog = dog,
+                    Owners = _ownerRepo.GetAllOwners()
+                };
+
+                return View(vm);
             }
         }
 
@@ -62,11 +81,20 @@ namespace DogGo.Controllers
         public ActionResult Edit(int id)
         {
             Dog dog = _dogRepo.GetDogById(id);
-            if (dog == null)
+            List<Owner> owners = _ownerRepo.GetAllOwners();
+
+            DogFormViewModel vm = new DogFormViewModel()
             {
-                return NotFound();
-            }
-            return View(dog);
+                Dog = dog,
+                Owners = owners
+            };
+
+            return View(vm);
+            //if (dog == null)
+            //{
+            //    return NotFound();
+            //}
+            //return View(dog);
         }
 
         // POST: DogsController/Edit/5
@@ -81,7 +109,13 @@ namespace DogGo.Controllers
             }
             catch
             {
-                return View(dog);
+                DogFormViewModel vm = new DogFormViewModel()
+                {
+                    Dog = dog,
+                    Owners = _ownerRepo.GetAllOwners()
+                };
+
+                return View(vm);
             }
         }
 
