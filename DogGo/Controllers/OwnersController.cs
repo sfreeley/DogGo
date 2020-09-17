@@ -6,17 +6,21 @@ using DogGo.Models;
 using DogGo.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DogGo.Controllers
 {
     public class OwnersController : Controller
     {
         private readonly IOwnerRepository _ownerRepo;
+        private readonly IDogRepository _dogRepo;
+        //private readonly IWalkerRepository _walkerRepo;
 
         // ASP.NET will give us an instance of our Walker Repository. This is called "Dependency Injection"
-        public OwnersController(IOwnerRepository ownerRepository)
+        public OwnersController(IOwnerRepository ownerRepository, IDogRepository dogRepository)
         {
             _ownerRepo = ownerRepository;
+            _dogRepo = dogRepository;
         }
         // GET: OwnersController
         public ActionResult Index()
@@ -30,13 +34,22 @@ namespace DogGo.Controllers
         public ActionResult Details(int id)
         {
             Owner owner = _ownerRepo.GetOwnerById(id);
+            List<Dog> dogs = _dogRepo.GetDogsByOwnerId(owner.Id);
 
-            if (owner == null)
+            DogOwnerViewModel dogown = new DogOwnerViewModel()
             {
-                return NotFound();
-            }
+                Owner = owner,
+                Dogs = dogs
+            };
+            return View(dogown);
 
-            return View(owner);
+            //previous owner details code
+            //if (owner == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //return View(owner);
         }
 
         // GET: OwnersController/Create
