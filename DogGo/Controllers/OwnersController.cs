@@ -102,12 +102,21 @@ namespace DogGo.Controllers
         public ActionResult Edit(int id)
         {
             Owner owner = _ownerRepo.GetOwnerById(id);
-            if (owner == null)
-            {
-                return NotFound();
-            }
+            List<Neighborhood> neighborhoods = _neighborhoodRepo.GetAll();
 
-            return View(owner);
+            OwnerFormViewModel vm = new OwnerFormViewModel()
+            {
+                Owner = owner,
+                Neighborhoods = neighborhoods
+            };
+
+            return View(vm);
+            //if (owner == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //return View(owner);
         }
 
         // POST: OwnersController/Edit/5
@@ -122,9 +131,15 @@ namespace DogGo.Controllers
             }
             catch
             {
-                return View(owner);
-            }
+                OwnerFormViewModel vm = new OwnerFormViewModel()
+                {
+                    Owner = owner,
+                    Neighborhoods = _neighborhoodRepo.GetAll()
+                };
+            return View(vm);
         }
+            
+    }
 
         // GET: OwnersController/Delete/5
         //this will display the delete message and ask if you are sure
