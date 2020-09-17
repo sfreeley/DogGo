@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DogGo.Models;
+using DogGo.Models.ViewModels;
 using DogGo.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,13 +15,14 @@ namespace DogGo.Controllers
     {
         private readonly IOwnerRepository _ownerRepo;
         private readonly IDogRepository _dogRepo;
-        //private readonly IWalkerRepository _walkerRepo;
+        private readonly IWalkerRepository _walkerRepo;
 
         // ASP.NET will give us an instance of our Walker Repository. This is called "Dependency Injection"
-        public OwnersController(IOwnerRepository ownerRepository, IDogRepository dogRepository)
+        public OwnersController(IOwnerRepository ownerRepository, IDogRepository dogRepository, IWalkerRepository walkerRepository)
         {
             _ownerRepo = ownerRepository;
             _dogRepo = dogRepository;
+            _walkerRepo = walkerRepository;
         }
         // GET: OwnersController
         public ActionResult Index()
@@ -31,25 +33,35 @@ namespace DogGo.Controllers
         }
 
         // GET: OwnersController/Details/5
+        //this owners controller will get the id number from the url and that is what is
+        //being passed into the Details method;
         public ActionResult Details(int id)
         {
+            //get the one owner by Id (user is clicking on this owner)
             Owner owner = _ownerRepo.GetOwnerById(id);
-            List<Dog> dogs = _dogRepo.GetDogsByOwnerId(owner.Id);
-
-            ProfileViewModel dogown = new ProfileViewModel()
-            {
-                Owner = owner,
-                Dogs = dogs
-            };
-            return View(dogown);
-
-            //previous owner details code
             //if (owner == null)
             //{
             //    return NotFound();
             //}
 
-            //return View(owner);
+            //pass this owner's Id into the method that gets a list of dogs by that ownerId
+            List<Dog> dogs = _dogRepo.GetDogsByOwnerId(owner.Id);
+
+            //get a list of walkers by the owner's neighborhoodId  
+            List<Walker> walkers = _walkerRepo.GetWalkersInNeighborhood(owner.NeighborhoodId);
+
+            //create new instance of your ProfileViewModel
+            ProfileViewModel vm = new ProfileViewModel()
+            {
+                //these are setting the properties in your ProfileViewModel class to their respective values
+                //which we obtained from above;
+                Owner = owner,
+                Dogs = dogs,
+                Walkers = walkers
+            };
+
+            //controller class then passes this information to the Razor view;
+            return View(vm);
         }
 
         // GET: OwnersController/Create

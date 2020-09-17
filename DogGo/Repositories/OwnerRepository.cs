@@ -79,23 +79,7 @@ namespace DogGo.Repositories
                                     NeighborhoodId
                                     FROM Owner
                                     WHERE Id = @id";
-                    //cmd.CommandText = @"
-                    //    SELECT o.Id, 
-                    //    o.[Name], 
-                    //    o.Email, 
-                    //    o.[Address], 
-                    //    o.NeighborhoodId, 
-                    //    o.Phone,
-                    //    d.Id,
-                    //    d.[Name],
-                    //    d.Breed,
-                    //    d.Notes,
-                    //    d.ImageUrl,
-                    //    d.OwnerId
-                    //    FROM Owner o
-                    //    JOIN Dog d ON d.OwnerId = o.Id
-                    //    WHERE Id = @id
-                    //";
+                   
 
                     cmd.Parameters.AddWithValue("@id", id);
                     
@@ -104,18 +88,9 @@ namespace DogGo.Repositories
 
                     if (reader.Read())
                     {
-                        //Owner owner = null;
-                        //Dog dog = new Dog()
-                        //{
-                        //    Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                        //    Name = reader.GetString(reader.GetOrdinal("Name")),
-                        //    Breed = reader.GetString(reader.GetOrdinal("Breed")),
-                        //    Notes = reader.GetString(reader.GetOrdinal("Notes")),
-                        //    ImageUrl = reader.GetString(reader.GetOrdinal("ImageUrl")),
-                        //    OwnerId = reader.GetInt32(reader.GetOrdinal("OwnerId")),
                         Owner owner = new Owner
                         {
-                            Id = id,
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
                             Name = reader.GetString(reader.GetOrdinal("Name")),
                             Email = reader.GetString(reader.GetOrdinal("Email")),
                             NeighborhoodId = reader.GetInt32(reader.GetOrdinal("NeighborhoodId")),
