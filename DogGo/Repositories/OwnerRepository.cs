@@ -214,7 +214,7 @@ namespace DogGo.Repositories
                                 [Name] = @name, 
                                 Email = @email, 
                                 Address = @address, 
-                                Phone = @phone, 
+                                Phone = @phone,
                                 NeighborhoodId = @neighborhoodId
                             WHERE Id = @id";
 

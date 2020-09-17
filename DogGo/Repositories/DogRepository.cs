@@ -34,9 +34,9 @@ namespace DogGo.Repositories
                 {
                    
                     cmd.CommandText = @"
-                        SELECT Id, [Name], Breed, OwnerId
+                        SELECT Id, [Name], Breed, OwnerId, Notes, ImageUrl
                         FROM Dog
-                        WHERE Notes IS NULL AND ImageUrl IS NULL";
+                        ";
 
                     SqlDataReader reader = cmd.ExecuteReader();
 
@@ -49,8 +49,8 @@ namespace DogGo.Repositories
                             Name = reader.GetString(reader.GetOrdinal("Name")),
                             Breed = reader.GetString(reader.GetOrdinal("Breed")),
                             OwnerId= reader.GetInt32(reader.GetOrdinal("OwnerId")),
-                            //Notes = reader.GetString(reader.GetOrdinal("Notes")),
-                            //ImageUrl = reader.GetString(reader.GetOrdinal("ImageUrl"))
+                            Notes = reader.GetString(reader.GetOrdinal("Notes")),
+                            ImageUrl = reader.GetString(reader.GetOrdinal("ImageUrl"))
                         };
 
                         dogs.Add(dog);
@@ -74,9 +74,9 @@ namespace DogGo.Repositories
                                     Id,
                                     [Name],
                                     Breed,
+                                    Notes,
                                     ImageUrl,
-                                    OwnerId,
-                                    Notes
+                                    OwnerId
                                     FROM Dog
                                     WHERE Id = @id";
                     
@@ -95,7 +95,7 @@ namespace DogGo.Repositories
                             Breed = reader.GetString(reader.GetOrdinal("Breed")),
                             Notes = reader.GetString(reader.GetOrdinal("Notes")),
                             ImageUrl = reader.GetString(reader.GetOrdinal("ImageUrl")),
-                            OwnerId = reader.GetInt32(reader.GetOrdinal("OwnerId")),
+                            OwnerId = reader.GetInt32(reader.GetOrdinal("OwnerId"))
                         };
 
                         reader.Close();
