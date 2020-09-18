@@ -12,5 +12,8 @@ namespace DogGo.Models
         public int Duration { get; set; }
         public int WalkerId { get; set; }
         public int DogId { get; set; }
+
+        //allows displaying of the actual owner's name in walker details page
+        public Owner Owner { get; set; }
     }
 }

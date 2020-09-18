@@ -16,7 +16,7 @@
         </div>
         <div>
             <label class="font-weight-bold">Neighborhood:</label>
-            <span>@Model.Walker.NeighborhoodId</span>
+            <span>@Model.Walker.Neighborhood.Name</span>
         </div>
         @*<div>
             <label class="font-weight-bold">Phone:</label>
@@ -56,11 +56,11 @@
                             </div>
                             <div>
                                 <label class="font-weight-bold">Client:</label>
-                                <span>@walk.DogId</span>
+                                <span>@walk.Owner.Name</span>
                             </div>
                             <div>
                                 <label class="font-weight-bold">Duration:</label>
-                                <p>@walk.Duration min</p>
+                                <p>@walk.Duration</p>
                             </div>
                         </div>
                     </div>
