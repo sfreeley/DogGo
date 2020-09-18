@@ -12,6 +12,9 @@ namespace DogGo.Models
         public string Name { get; set; }
         public string Address { get; set; }
         public int NeighborhoodId { get; set; }
+        //this will display the name of the neighborhood instead of having to display the neighborhoodId
+        public Neighborhood Neighborhood { get; set; }
         public string Phone { get; set; }
+
     }
 }
