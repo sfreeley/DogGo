@@ -36,20 +36,13 @@ namespace DogGo.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                   SELECT w.Id, w.Date, w.Duration, w.WalkerId, w.DogId, wr.[Name], wr.NeighborhoodId, wr.ImageUrl, d.OwnerId, 
+                   SELECT w.Id, w.Date, w.Duration, w.WalkerId, w.DogId, wr.[Name], wr.NeighborhoodId, wr.ImageUrl,
                     o.Id AS OwnerId, 
-                    o.[Name] AS OwnerName,
-                    o.Email,
-                    o.Address,
-                    o.NeighborhoodId,
-                    o.Phone,
-                    n.Id AS NeighborhoodId,
-                    n.Name as NeighborhoodName
+                    o.[Name] AS OwnerName
                     FROM Walks w JOIN Walker wr ON w.WalkerId = wr.Id
                     JOIN Dog d ON w.DogId = d.Id
                     JOIN Owner o ON d.OwnerId = o.Id
-                    JOIN Neighborhood n ON  o.NeighborhoodId = n.Id
-                    WHERE w.Id = @walkerId
+                    WHERE wr.Id = @walkerId
                     ";
 
                     cmd.Parameters.AddWithValue("@walkerId", walkerId);
@@ -71,16 +64,7 @@ namespace DogGo.Repositories
                             { 
                                 Id = reader.GetInt32(reader.GetOrdinal("OwnerId")),
                                 Name = reader.GetString(reader.GetOrdinal("OwnerName")),
-                                Email = reader.GetString(reader.GetOrdinal("Email")),
-                                Address = reader.GetString(reader.GetOrdinal("Email")),
-                                Phone = reader.GetString(reader.GetOrdinal("Email")),
-                                NeighborhoodId = reader.GetInt32(reader.GetOrdinal("NeighborhoodId")),
-                                Neighborhood = new Neighborhood
-                                { 
-                                    Id = reader.GetInt32(reader.GetOrdinal("NeighborhoodId")),
-                                    Name = reader.GetString(reader.GetOrdinal("NeighborhoodName"))
-                                }
-                                
+                  
                             }
                         };
 

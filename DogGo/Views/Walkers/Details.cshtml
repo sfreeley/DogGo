@@ -60,10 +60,13 @@
                             </div>
                             <div>
                                 <label class="font-weight-bold">Duration:</label>
-                                <p>@walk.Duration</p>
-                            </div>
-                        </div>
-                    </div>
+                                <p>@(@walk.Duration / 60) minutes </p>
+   
+                               </div>
+   
+                           </div>
+   
+                       </div>
                 }
             </div>
         </section>
@@ -74,7 +77,7 @@
             <ul class="list-group mt-4"
                     <li class="list-group-item disabled" aria-disabled="true">
                         @*<img src="@walker.ImageUrl" style="width:50px" />*@
-                        <span class="font-weight-bold ml-4">@Model.Walks.Sum(walk => walk.Duration) minutes</span>
+                        <span class="font-weight-bold ml-4">@(TimeSpan.FromMinutes(@Model.Walks.Sum(walk => walk.Duration) / 60).Hours) Hours @(TimeSpan.FromMinutes(@Model.Walks.Sum(walk => walk.Duration) / 60).Minutes) Minutes</span>
                     </li>
             </ul>
         </section>
