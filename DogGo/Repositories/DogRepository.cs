@@ -12,7 +12,7 @@ namespace DogGo.Repositories
     {
         private readonly IConfiguration _config;
 
-        // The constructor accepts an IConfiguration object as a paramter
+        // The constructor accepts an IConfiguration object as a parameter
         public DogRepository(IConfiguration config)
         {
             _config = config;

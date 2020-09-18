@@ -1,42 +1,86 @@
-﻿@model DogGo.Models.Walker
+﻿@model DogGo.Models.ViewModels.DetailViewModel
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-
 <div>
-    <h4>Walker</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NeighborhoodId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NeighborhoodId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            <img class="bg-info" src="@Model.ImageUrl" alt="avatar" />
-        </dd>
-    </dl>
+    <h1 class="mb-4">Walker Profile</h1>
+
+    <section class="container">
+        <img style="width:100px;float:left;margin-right:20px"
+             src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Font_Awesome_5_regular_user-circle.svg" />
+        <div>
+            <label class="font-weight-bold">Name:</label>
+            <span>@Model.Walker.Name</span>
+        </div>
+        <div>
+            <label class="font-weight-bold">Neighborhood:</label>
+            <span>@Model.Walker.NeighborhoodId</span>
+        </div>
+        @*<div>
+            <label class="font-weight-bold">Phone:</label>
+            <span>@Model.Owner.Phone</span>
+        </div>
+        <div>
+            <label class="font-weight-bold">Email:</label>
+            <span>@Model.Owner.Email</span>
+        </div>*@
+    </section>
+
+    <hr class="mt-5" />
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <section class="col-8 container mt-5">
+            <h1 class="text-left">Recent Walks</h1>
+
+            <div class="row">
+                @foreach (Walk walk in Model.Walks)
+                {
+                    <div class="card m-4" style="width: 18rem;">
+                        @*@if (String.IsNullOrEmpty(dog.ImageUrl))
+                        {
+                            <img src="https://cdn.pixabay.com/photo/2018/08/15/13/12/dog-3608037_960_720.jpg"
+                                 class="card-img-top"
+                                 alt="Doggo" />
+                        }
+                        else
+                        {
+                            <img src="@dog.ImageUrl" class="card-img-top" alt="Doggo" />
+                        }*@
+                        <div class="card-body">
+                            <div>
+                                <label class="font-weight-bold">Date:</label>
+                                <span>@walk.Date.ToString("dd/MM/yyyy")</span>
+                            </div>
+                            <div>
+                                <label class="font-weight-bold">Client:</label>
+                                <span>@walk.DogId</span>
+                            </div>
+                            <div>
+                                <label class="font-weight-bold">Duration:</label>
+                                <p>@walk.Duration min</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+
+        <section class="col-lg-4 col-md-8 container mt-5">
+            <h1>Total Walk Time</h1>
+
+            <ul class="list-group mt-4"
+                    <li class="list-group-item disabled" aria-disabled="true">
+                        @*<img src="@walker.ImageUrl" style="width:50px" />*@
+                        <span class="font-weight-bold ml-4">@Model.Walks.Sum(walk => walk.Duration) minutes</span>
+                    </li>
+            </ul>
+        </section>
+    </div>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Edit", "Edit", new { @*id = Model.Walker.Id*@ }) |
     <a asp-action="Index">Back to List</a>
 </div>
