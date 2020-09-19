@@ -13,6 +13,7 @@ namespace DogGo.Models
         public string Notes { get; set; }
         public string ImageUrl { get; set; }    
         public int OwnerId { get; set; }
+        public bool isSelected { get; set; }
         
     }
 }

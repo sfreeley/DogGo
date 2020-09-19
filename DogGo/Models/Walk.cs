@@ -15,5 +15,7 @@ namespace DogGo.Models
 
         //allows displaying of the actual owner's name in walker details page
         public Owner Owner { get; set; }
+
+        public Dog Dog {get; set;}
     }
 }
