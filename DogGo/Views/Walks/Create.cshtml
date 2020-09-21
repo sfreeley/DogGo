@@ -36,30 +36,9 @@
             
             <div class="form-group">
                 <label asp-for="Walk.DogId" class="control-label">Select Dog(s)</label>
+                @* creating the ListBox in order to select multiple values from the list;
+                   first parameter is the property SelectedDogs from the WalkFormViewModel which will hold the selected id's of the dogs as strings; second property is the list of dogs *@
                 @Html.ListBoxFor(x => x.SelectedDogs, Model.DogsList)
-                <!--<asp:ListBox runat="server" SelectionMode="Multiple">
-                    @foreach (Dog dog in Model.Dogs)
-
-                    {
-
-
-                        <asp:ListItem Text="@dog.Name" Value="@dog.Id" />
-
-
-                    }
-                </asp:ListBox>
-                
-            </div>
-            <div class="form-group">
-            <label asp-for="Walk.DogId" class="control-label">Select Dog(s)</label>
-            <select asp-for="Walk.DogId" class="form-control" multiple="multiple">-->
-                @*<option value="">Select Dog</option>*@
-                <!--@foreach (Dog dog in Model.Dogs)
-                {
-                    <option value="@dog.Id">@dog.Name</option>
-                }
-            </select>
-            <span asp-validation-for="Walk.DogId" class="text-danger"></span>-->
         </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
