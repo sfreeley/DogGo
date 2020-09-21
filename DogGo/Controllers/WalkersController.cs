@@ -28,17 +28,26 @@ namespace DogGo.Controllers
         // GET: WalkersController
         public ActionResult Index()
         {
-            int ownerId = GetCurrentUserId();
-            Owner owner = _ownerRepo.GetOwnerById(ownerId);
-            List<Walker> walkers = _walkerRepo.GetWalkersInNeighborhood(owner.NeighborhoodId);
-            if (owner == null || walkers == null)
+            List<Walker> allWalkers = _walkerRepo.GetAllWalkers();
+            try
             {
-                return NotFound();
+                int ownerId = GetCurrentUserId();
+                Owner owner = _ownerRepo.GetOwnerById(ownerId);
+                List<Walker> walkers = _walkerRepo.GetWalkersInNeighborhood(owner.NeighborhoodId);
+                if (owner == null || walkers == null || allWalkers == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return View(walkers);
+                }
             }
-            else
+            catch(Exception ex)
             {
-                return View(walkers);
+                return View(allWalkers);
             }
+           
   
         }
 
