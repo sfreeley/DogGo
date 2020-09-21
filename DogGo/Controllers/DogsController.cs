@@ -50,11 +50,13 @@ namespace DogGo.Controllers
         // GET: DogsController/Create
         public ActionResult Create()
         {
+            List<Owner> owners = _ownerRepo.GetAllOwners();
             //using view model so we can connect the list of owners with the individual dog
             DogFormViewModel vm = new DogFormViewModel()
             {
                 Dog = new Dog(),
-                Owners = _ownerRepo.GetAllOwners()
+                Owners = owners
+               
             };
 
             return View(vm);
@@ -72,15 +74,18 @@ namespace DogGo.Controllers
                 //since we are not allowing user to chose the owner when adding a dog, we need to set the OwnerId to the id of the user/owner that is signed in;
                 dog.OwnerId = GetCurrentUserId();
                 _dogRepo.AddDog(dog);
+                
                 return RedirectToAction("Index");
             }
             catch
             {
+                List<Owner> owners = _ownerRepo.GetAllOwners();
                 //if something goes wrong we return to the view, which is the DogFormViewModel
                 DogFormViewModel vm = new DogFormViewModel()
                 {
                     Dog = dog,
-                    Owners = _ownerRepo.GetAllOwners()
+                    Owners = owners
+                   
                 };
 
                 return View(vm);
@@ -90,7 +95,9 @@ namespace DogGo.Controllers
         // GET: DogsController/Edit/5
         public ActionResult Edit(int id)
         {
+           
             Dog dog = _dogRepo.GetDogById(id);
+            int ownerId = GetCurrentUserId();
             List<Owner> owners = _ownerRepo.GetAllOwners();
 
             DogFormViewModel vm = new DogFormViewModel()
@@ -99,12 +106,16 @@ namespace DogGo.Controllers
                 Owners = owners
             };
 
-            return View(vm);
-            //if (dog == null)
-            //{
-            //    return NotFound();
-            //}
-            //return View(dog);
+           
+            if (dog.OwnerId != ownerId)
+            {
+              return NotFound();
+            }
+            else 
+            {
+              return View(vm);
+            }
+            
         }
 
         // POST: DogsController/Edit/5
@@ -114,6 +125,7 @@ namespace DogGo.Controllers
         {
             try
             {
+                
                 _dogRepo.UpdateDog(dog);
                 return RedirectToAction("Index");
             }
@@ -133,7 +145,16 @@ namespace DogGo.Controllers
         public ActionResult Delete(int id)
         {
             Dog dog = _dogRepo.GetDogById(id);
-            return View(dog);
+            int ownerId = GetCurrentUserId();
+            if (dog.OwnerId == ownerId)
+            {
+                return View(dog);
+            }
+            else
+            {
+                return NotFound();
+            }
+            
         }
 
         // POST: DogsController/Delete/5
