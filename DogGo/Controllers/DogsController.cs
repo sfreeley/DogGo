@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 using DogGo.Models;
 using DogGo.Models.ViewModels;
 using DogGo.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DogGo.Controllers
 {
+    //there are routes we don't want a user that is not authenticated to view and make changes; this attribute will not allow a user that is not logged in
+    //to view a protected route; will redirect them to the login page;
+    [Authorize]
     public class DogsController : Controller
     {
         private readonly IDogRepository _dogRepo;
@@ -65,6 +69,8 @@ namespace DogGo.Controllers
             {
                 //add a new dog to the database
                 //this new dog may or may not have a value for Notes and/or ImageUrl
+                //since we are not allowing user to chose the owner when adding a dog, we need to set the OwnerId to the id of the user/owner that is signed in;
+                dog.OwnerId = GetCurrentUserId();
                 _dogRepo.AddDog(dog);
                 return RedirectToAction("Index");
             }
