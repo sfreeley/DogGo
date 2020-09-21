@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using DogGo.Models;
 using DogGo.Models.ViewModels;
@@ -23,7 +24,10 @@ namespace DogGo.Controllers
         // GET: DogsController
         public ActionResult Index()
         {
-            List<Dog> dogs = _dogRepo.GetAllDogs();
+            //setting ownerId variable to the current id of the owner/user that's logged in (using the private method we declared at the bottom of the page)
+            int ownerId = GetCurrentUserId();
+            //now passing in that ownerId as an argument to the GetDogsByOwnerId method that will get all the dogs for that owner/user;
+            List<Dog> dogs = _dogRepo.GetDogsByOwnerId(ownerId);
             return View(dogs);
         }
 
@@ -140,6 +144,13 @@ namespace DogGo.Controllers
             {
                 return View(dog);
             }
+        }
+
+        //this is a private method that will get the id of the current user/owner that's logged in
+        private int GetCurrentUserId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
         }
     }
 }
