@@ -75,6 +75,12 @@ namespace DogGo.Controllers
             //will bring user/owner to Dog's Index page
             return RedirectToAction("Index", "Dogs");
         }
+        //this will logout the user/owner
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
         // GET: OwnersController
         public ActionResult Index()
         {
