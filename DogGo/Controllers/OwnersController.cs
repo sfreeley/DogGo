@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using DogGo.Models;
 using DogGo.Models.ViewModels;
 using DogGo.Repositories;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -25,6 +28,52 @@ namespace DogGo.Controllers
             _dogRepo = dogRepository;
             _walkerRepo = walkerRepository;
             _neighborhoodRepo = neighborhoodRepository;
+        }
+
+        //this will show the login form to the user
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        //specify this is the Login POST method
+        //when user clicks submit to login with email, this code will run
+        //take in an instance of the LoginViewModel
+        [HttpPost]
+        public async Task<ActionResult> Login(LoginViewModel viewModel)
+        {
+            //getting one owner based on their email address -- we are seeing if the owner's typed in email address matches a user's email address in the database
+            Owner owner = _ownerRepo.GetOwnerByEmail(viewModel.Email);
+
+            //if there is no owner found with that typed in email address, return that they are not authorized
+            if (owner == null)
+            {
+                return Unauthorized();            
+            }
+
+            //otherwise, keep going (claims will be a list of properties we want to remember and store about the user 
+            var claims = new List<Claim>
+            {
+                //this is the owner's Id, which is generally an identifier that is most commonly used across the board in authentication and authorization;
+                //all values will be stored as strings
+                new Claim(ClaimTypes.NameIdentifier, owner.Id.ToString()),
+                new Claim(ClaimTypes.Email, owner.Email),
+                new Claim(ClaimTypes.Role, "DogOwner"),
+            };
+
+            //saving user/owner data into a cookie (ie the claims list with the information we chose to store: email, id, role) --this allows us to store data on a user's browser
+            //the server will then take that cookie and return it to whoever made that request;
+            //in the future, the server will know when that user is making a request and will send the value of the data that's stored in that cookie 
+            var claimsIdentity = new ClaimsIdentity(
+            claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            //this code will sign in the user;
+            await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            new ClaimsPrincipal(claimsIdentity));
+
+            //will bring user/owner to Dog's Index page
+            return RedirectToAction("Index", "Dogs");
         }
         // GET: OwnersController
         public ActionResult Index()

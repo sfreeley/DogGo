@@ -34,17 +34,6 @@
                 <span asp-validation-for="Dog.ImageUrl" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Dog.OwnerId" class="control-label"></label>
-                <select asp-for="Dog.OwnerId" class="form-control">
-                    <option value="">Select Owner</option>
-                    @foreach (Owner owner in Model.Owners)
-                    { 
-                        <option value="@owner.Id">@owner.Name</option>
-                    }
-                </select>
-                <span asp-validation-for="Dog.OwnerId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
