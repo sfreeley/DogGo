@@ -8,8 +8,17 @@
     <h1 class="mb-4">Walker Profile</h1>
 
     <section class="container">
-        <img style="width:100px;float:left;margin-right:20px"
-             src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Font_Awesome_5_regular_user-circle.svg" />
+        @if (String.IsNullOrEmpty(Model.Walker.ImageUrl))
+        {
+            <img style="width:100px;float:left;margin-right:20px"
+                 src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Font_Awesome_5_regular_user-circle.svg" />
+            
+        }
+        else
+        { 
+            <img style="width:100px; float:left; margin-right:20px" src="@Model.Walker.ImageUrl" class="card-img-top" alt="Doggo" />
+        }
+
         <div>
             <label class="font-weight-bold">Name:</label>
             <span>@Model.Walker.Name</span>
@@ -34,21 +43,6 @@
     <div class="row">
         <section class="col-8 container mt-5">
             <h1 class="text-left">Recent Walks</h1>
-
-            
-          
-            
-                @*<div class="card m-4" style="width: 18rem;">*@
-                @*@if (String.IsNullOrEmpty(dog.ImageUrl))
-            {
-                <img src="https://cdn.pixabay.com/photo/2018/08/15/13/12/dog-3608037_960_720.jpg"
-                     class="card-img-top"
-                     alt="Doggo" />
-            }
-            else
-            {
-                <img src="@dog.ImageUrl" class="card-img-top" alt="Doggo" />
-            }*@
                 <table class="table">
                     <thead>
                         <tr>
@@ -63,7 +57,7 @@
                             <tr>
 
                                 
-                                <td>@walk.Date.ToString("dd/MM/yyyy")</td>
+                                <td>@walk.Date.ToString("MM-dd-yyyy")</td>
                                 <td>@walk.Owner.Name</td>
                                 <td>@(@walk.Duration / 60) minutes </td>
                                 
